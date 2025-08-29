@@ -1,0 +1,64 @@
+{
+  "name": "zide-store",
+  "version": "1.0.0",
+  "description": "Modern e-commerce desktop application built with Electron",
+  "main": "main.js",
+  "preferGlobal": true,
+  "engines": {
+    "node": ">=16"
+  },
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "build": "electron-builder",
+    "build-win": "electron-builder --win",
+    "build-mac": "electron-builder --mac",
+    "build-linux": "electron-builder --linux",
+    "zide:start": "npm run start"
+  },
+  "bin": {
+    "zide": "bin/zide.js"
+  },
+  "files": [
+    "bin/"
+  ],
+  "author": "Zide Store Team",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^26.0.0",
+    "electron-builder": "^24.6.4"
+  },
+  "build": {
+    "appId": "com.zide.store",
+    "productName": "Zide Store",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "renderer/**/*",
+      "assets/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "assets/logo.png"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "assets/logo.png"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "assets/logo.png"
+    }
+  },
+  "keywords": [
+    "electron",
+    "ecommerce",
+    "store",
+    "desktop",
+    "shopping"
+  ]
+}

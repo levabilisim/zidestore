@@ -1,0 +1,53 @@
+/* Custom Scrollbar Component
+   Apply the class .custom-scroll to the body or containers you want to style.
+   Uses WebKit + Firefox properties. */
+:root{
+  --scroll-bg: rgba(255,255,255,0.02);
+  --scroll-track: rgba(0,0,0,0);
+  --scroll-thumb: rgba(150,150,150,0.12);
+  --scroll-thumb-hover: rgba(150,150,150,0.22);
+  --scroll-thumb-active: rgba(150,150,150,0.32);
+  --scroll-thickness: 10px;
+}
+
+/* Apply to elements that have the .custom-scroll class or descendants */
+.custom-scroll, .custom-scroll * {
+  scrollbar-color: var(--scroll-thumb) var(--scroll-track);
+  scrollbar-width: thin;
+}
+
+/* WebKit-based browsers */
+.custom-scroll ::-webkit-scrollbar {
+  width: var(--scroll-thickness);
+  height: var(--scroll-thickness);
+}
+.custom-scroll ::-webkit-scrollbar-track {
+  background: var(--scroll-track);
+  border-radius: 999px;
+}
+.custom-scroll ::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--scroll-thumb), var(--scroll-thumb));
+  border-radius: 999px;
+  border: 2px solid transparent; /* spacing */
+  background-clip: padding-box;
+}
+.custom-scroll ::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--scroll-thumb-hover), var(--scroll-thumb-hover));
+}
+.custom-scroll ::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(180deg, var(--scroll-thumb-active), var(--scroll-thumb-active));
+}
+
+/* Slightly different look for the main content and panels */
+.main-content.custom-scroll, .library-main.custom-scroll {
+  --scroll-thumb: rgba(180,180,180,0.14);
+  --scroll-thumb-hover: rgba(180,180,180,0.26);
+}
+
+/* Make the table horizontally responsive but keep vertical scroll tidy */
+.library-main .library-table { width:100%; display:block; overflow:auto; }
+
+/* Small screens: thinner scrollbar */
+@media (max-width:720px){
+  :root{ --scroll-thickness:8px; }
+}

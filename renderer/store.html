@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zide Store - Ana Sayfa</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Title Bar Component -->
+    <link rel="stylesheet" href="styles/titlebar.css">
+    <link rel="stylesheet" href="components/scrollbar/scrollbar.css">
+</head>
+<body class="store-body" data-page="store">
+    <!-- Title Bar will be injected here by JavaScript -->
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" onclick="showSection('home')">
+                <i class="fas fa-home"></i> Ana Sayfa
+            </a>
+            <a href="#" class="nav-item" onclick="showSection('products')">
+                <i class="fas fa-compass"></i> Keşfet
+            </a>
+            <a href="#" class="nav-item" onclick="showSection('cart')">
+                <i class="fas fa-shopping-cart"></i> Sepet <span class="cart-count" id="cartCount">0</span>
+            </a>
+            <a href="#" class="nav-item" onclick="showSection('profile')">
+                <i class="fas fa-user"></i> Profil
+            </a>
+            <a href="#" class="nav-item" onclick="showSection('library')">
+                <i class="fas fa-book"></i> Kütüphane
+            </a>
+            <a href="#" class="nav-item" onclick="showSection('settings')">
+                <i class="fas fa-cog"></i> Ayarlar
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Çıkış
+            </button>
+        </div>
+    </div>
+
+    <!-- Ana İçerik -->
+    <main class="main-content">
+        <!-- Ana Sayfa -->
+        <section id="home" class="content-section active">
+            <!-- Hero / Welcome -->
+            <section class="hero">
+                <div class="hero-left">
+                    <h1>Zide Store'a Hoş Geldiniz!</h1>
+                    <p>En yeni ürünleri keşfedin, fırsatları kaçırmayın — hızlıca ara veya ilginizi çeken kategorilere göz atın.</p>
+
+                    <div class="hero-actions">
+                        <div class="hero-search">
+                            <i class="fas fa-search"></i>
+                            <input id="heroSearchInput" type="text" placeholder="Ürün, kategori veya marka ara...">
+                            <button class="hero-search-btn" onclick="heroSearch()">Ara</button>
+                        </div>
+
+                        <div class="hero-ctas">
+                            <button onclick="showSection('products')" class="cta primary">Tüm Ürünler</button>
+                            <button onclick="showSection('products'); document.getElementById('categoryFilter').value='elektronik'; filterProducts();" class="cta ghost">Elektronik</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-right">
+                    <img src="../assets/logo.png" alt="Zide" class="hero-illustration">
+                </div>
+            </section>
+
+            <!-- Kategori Kartları -->
+            <div class="categories">
+                <h2>Popüler Kategoriler</h2>
+                <div class="categories-grid">
+                    <div class="category-card" onclick="selectCategory('elektronik')">
+                        <i class="fas fa-plug"></i>
+                        <span>Elektronik</span>
+                    </div>
+                    <div class="category-card" onclick="selectCategory('giyim')">
+                        <i class="fas fa-tshirt"></i>
+                        <span>Giyim</span>
+                    </div>
+                    <div class="category-card" onclick="selectCategory('kitap')">
+                        <i class="fas fa-book"></i>
+                        <span>Kitap</span>
+                    </div>
+                    <div class="category-card" onclick="selectCategory('oyun')">
+                        <i class="fas fa-gamepad"></i>
+                        <span>Oyun</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured -->
+            <div class="featured-products">
+                <h2>Öne Çıkan Ürünler</h2>
+                <div class="product-grid" id="featuredGrid">
+                    <!-- Ürünler JavaScript ile yüklenecek -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Ürünler Sayfası -->
+        <section id="products" class="content-section">
+            <div class="products-header">
+                <div class="products-header-left">
+                    <h2>Tüm Ürünler</h2>
+                    <p class="results-count" id="resultsCount"></p>
+                </div>
+
+                <div class="products-header-right">
+                    <div class="products-search">
+                        <i class="fas fa-search"></i>
+                        <input id="searchInput" type="text" placeholder="Ürün veya açıklama ara...">
+                    </div>
+
+                    <div class="filters">
+                        <select id="categoryFilter" onchange="filterProducts()">
+                            <option value="">Tüm Kategoriler</option>
+                            <option value="elektronik">Elektronik</option>
+                            <option value="giyim">Giyim</option>
+                            <option value="kitap">Kitap</option>
+                            <option value="oyun">Oyun</option>
+                        </select>
+                        <select id="sortBy" onchange="sortProducts()">
+                            <option value="name">İsme Göre</option>
+                            <option value="price-low">Fiyat (Düşük-Yüksek)</option>
+                            <option value="price-high">Fiyat (Yüksek-Düşük)</option>
+                            <option value="rating">Puana Göre</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-grid" id="productsGrid">
+                <!-- Ürünler JavaScript ile yüklenecek -->
+            </div>
+        </section>
+
+        <!-- Product Detail Panel (off-canvas) -->
+        <aside id="productDetail" class="product-detail-panel">
+            <button class="close-panel" onclick="closeProductDetail()">×</button>
+            <div id="productDetailContent">
+                <!-- İçerik JS ile doldurulacak -->
+            </div>
+        </aside>
+
+        <!-- Sepet Sayfası -->
+        <section id="cart" class="content-section">
+            <h2>Alışveriş Sepeti</h2>
+            <div class="cart-container">
+                <div class="cart-items" id="cartItems">
+                    <!-- Sepet öğeleri JavaScript ile yüklenecek -->
+                </div>
+                <div class="cart-summary">
+                    <div class="summary-item">
+                        <span>Ara Toplam:</span>
+                        <span id="subtotal">₺0.00</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>KDV:</span>
+                        <span id="tax">₺0.00</span>
+                    </div>
+                    <div class="summary-item total">
+                        <span>Toplam:</span>
+                        <span id="total">₺0.00</span>
+                    </div>
+                    <button class="checkout-btn" onclick="checkout()">
+                        <i class="fas fa-credit-card"></i> Ödeme Yap
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Profil Sayfası -->
+        <section id="profile" class="content-section">
+            <h2>Kullanıcı Profili</h2>
+            <div class="profile-container">
+                <div class="profile-avatar">
+                    <img id="profileAvatarImg" src="assets/logo.png" alt="avatar">
+                    <div class="avatar-actions">
+                        <label class="avatar-upload-label">
+                            <input id="profileAvatar" type="file" accept="image/*" style="display:none">
+                            <span class="avatar-upload-button">Avatar Yükle</span>
+                        </label>
+                    </div>
+                    <div class="profile-stats">
+                        <div>Satın Alınan Oyunlar: <strong id="profileGamesCount">0</strong></div>
+                        <div>Toplam Oynama Süresi: <strong id="profileTotalHours">0 saat</strong></div>
+                    </div>
+                </div>
+                <div class="profile-form">
+                    <div class="profile-tabs">
+                        <button class="tab-btn active" data-tab="info" onclick="switchProfileTab(event,'info')">Profil</button>
+                        <button class="tab-btn" data-tab="security" onclick="switchProfileTab(event,'security')">Güvenlik</button>
+                        <button class="tab-btn" data-tab="2fa" onclick="switchProfileTab(event,'2fa')">2FA</button>
+                        <button class="tab-btn" data-tab="verify" onclick="switchProfileTab(event,'verify')">E-posta</button>
+                        <button class="tab-btn" data-tab="privacy" onclick="switchProfileTab(event,'privacy')">Gizlilik</button>
+                        <button class="tab-btn" data-tab="dev" onclick="switchProfileTab(event,'dev')">Geliştirici</button>
+                    </div>
+
+                    <div class="tab-panels">
+                        <div id="tab-info" class="tab-panel active">
+                            <div class="form-group">
+                                <label for="profileName">Ad Soyad:</label>
+                                <input type="text" id="profileName" value="">
+                            </div>
+                            <div class="form-group">
+                                <label for="profileEmail">E-posta:</label>
+                                <input type="email" id="profileEmail" value="">
+                            </div>
+                            <div class="form-group">
+                                <label for="profilePhone">Telefon:</label>
+                                <input type="tel" id="profilePhone" value="">
+                            </div>
+                            <button type="button" onclick="updateProfile()" class="update-btn">Güncelle</button>
+                        </div>
+
+                        <div id="tab-security" class="tab-panel">
+                            <h4>Güvenlik Ayarları</h4>
+                            <div class="form-group">
+                                <label>Hesap Parolası</label>
+                                <div style="display:flex;gap:8px;align-items:center;"><input type="password" id="newPassword" placeholder="Yeni parola"><button onclick="changePassword()">Parolayı Değiştir</button></div>
+                            </div>
+                            <div class="form-group">
+                                <label>İki Faktörlü Doğrulama</label>
+                                <div><button onclick="switchProfileTab(event,'2fa')">2FA Ayarlarına Git</button></div>
+                            </div>
+                            <div class="form-group">
+                                <label>Oturumlar</label>
+                                <div>Aktif oturumlar listesi burada gösterilecek (mock).</div>
+                            </div>
+                        </div>
+
+                        <div id="tab-2fa" class="tab-panel">
+                            <h4>İki Faktörlü Doğrulama (2FA)</h4>
+                            <div class="form-group">
+                                <label>2FA Durumu: <span id="twoFaStatus">Yükleniyor...</span></label>
+                            </div>
+                            <div class="form-group">
+                                <button id="toggle2faBtn" onclick="toggle2FA()">Aç/Kapa 2FA</button>
+                                <button onclick="generate2FACode()">2FA Kurulum Kodu Oluştur</button>
+                            </div>
+                        </div>
+
+                        <div id="tab-verify" class="tab-panel">
+                            <h4>E-posta Doğrulama</h4>
+                            <div class="form-group">
+                                <label>Hesabınıza bağlı e-posta: <span id="verifyEmailDisplay"></span></label>
+                            </div>
+                            <div class="form-group">
+                                <button onclick="resendVerification()">Doğrulama E-postası Yeniden Gönder</button>
+                            </div>
+                            <div class="form-group">
+                                <label>Doğrulama Durumu: <span id="verifyStatus">Bilinmiyor</span></label>
+                            </div>
+                        </div>
+
+                        <div id="tab-privacy" class="tab-panel">
+                            <h4>Gizlilik</h4>
+                            <div class="form-group">
+                                <label><input type="checkbox" id="shareStats"> Oynama istatistiklerini paylaş</label>
+                            </div>
+                            <div class="form-group">
+                                <label><input type="checkbox" id="showProfilePublic"> Profilimi herkese göster</label>
+                            </div>
+                            <div class="form-group">
+                                <button onclick="savePrivacySettings()">Gizlilik Ayarlarını Kaydet</button>
+                            </div>
+                        </div>
+
+                        <div id="tab-dev" class="tab-panel">
+                            <h4>Geliştirici</h4>
+                            <div class="form-group">
+                                <label>Uygulama Version: <strong id="appVersion">1.0.0</strong></label>
+                            </div>
+                            <div class="form-group">
+                                <label>API Anahtarı</label>
+                                <div><input type="text" id="devApiKey" placeholder="(mock)" style="width:100%"><button onclick="regenerateApiKey()">Yenile</button></div>
+                            </div>
+                            <div class="form-group">
+                                <button onclick="showDeveloperDocs()">Geliştirici Dokümantasyonu</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Kütüphane Sayfası -->
+        <section id="library" class="content-section">
+            <h2>Kütüphanem</h2>
+            <div class="library-container library-layout">
+                <div class="library-main">
+                    <div id="libraryGrid" class="library-grid">
+                        <!-- Satın alınan oyunlar burada listelenecek (tablo) -->
+                    </div>
+                </div>
+
+                <aside class="library-side">
+                    <h3>Kategoriler</h3>
+                    <div class="categories-list">
+                        <button class="cat-btn" onclick="selectCategory('oyun'); showSection('products');">Oyun</button>
+                        <button class="cat-btn" onclick="selectCategory('elektronik'); showSection('products');">Elektronik</button>
+                        <button class="cat-btn" onclick="selectCategory('giyim'); showSection('products');">Giyim</button>
+                        <button class="cat-btn" onclick="selectCategory('kitap'); showSection('products');">Kitap</button>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+        <!-- Ayarlar Sayfası -->
+        <section id="settings" class="content-section">
+            <h2>Ayarlar</h2>
+            <div class="settings-container">
+                <div class="setting-group">
+                    <h3>Tema</h3>
+                    <div class="theme-options">
+                        <label>
+                            <input type="radio" name="theme" value="dark" checked> Koyu Tema
+                        </label>
+                        <label>
+                            <input type="radio" name="theme" value="light"> Açık Tema
+                        </label>
+                    </div>
+                </div>
+                <div class="setting-group">
+                    <h3>Bildirimler</h3>
+                    <label class="switch">
+                        <input type="checkbox" id="notifications" checked>
+                        <span class="slider"></span>
+                        Bildirimleri etkinleştir
+                    </label>
+                </div>
+                <div class="setting-group">
+                    <h3>Dil</h3>
+                    <select id="language">
+                        <option value="tr">Türkçe</option>
+                        <option value="en">English</option>
+                    </select>
+                </div>
+                <button class="save-settings-btn" onclick="saveSettings()">
+                    Ayarları Kaydet
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <p>Yükleniyor...</p>
+    </div>
+
+    <!-- Bildirim Toast -->
+    <div class="toast" id="toast">
+        <span class="toast-message"></span>
+        <button class="toast-close" onclick="hideToast()">×</button>
+    </div>
+
+    <!-- Title Bar Component JavaScript -->
+    <script src="js/titlebar.js"></script>
+    <script src="js/search/advanced-search.js"></script>
+    <script src="components/scrollbar/scrollbar.js"></script>
+    <script src="script.js"></script>
+    <script src="store.js"></script>
+    
+    <!-- Title Bar Integration -->
+    <script>
+    // Store-specific title bar setup
+    document.addEventListener('DOMContentLoaded', function() {
+        // Title bar configuration for store page
+        const titleBarConfig = {
+            theme: localStorage.getItem('theme') || 'dark',
+            accentColor: localStorage.getItem('accentColor') || 'purple',
+            title: 'Zide Store - Mağaza',
+            icon: '../assets/logo.png',
+            showSearch: true,
+            showUser: true,
+            searchPlaceholder: 'Ürün, kategori ara...'
+        };
+        
+        // Initialize title bar
+        window.titleBar = new TitleBarManager(titleBarConfig);
+        
+        // Store-specific event handlers
+        setupStoreEventHandlers();
+    });
+    
+    function setupStoreEventHandlers() {
+        // Global search handler
+        window.handleGlobalSearch = function(query) {
+            if (query.trim()) {
+                // Switch to products section and search
+                showSection('products');
+                filterProductsBySearch(query);
+                
+                // Update search input in products section if exists
+                const productsSearchInput = document.getElementById('searchInput');
+                if (productsSearchInput) {
+                    productsSearchInput.value = query;
+                }
+            }
+        };
+        
+        // Execute search handler
+        window.executeSearch = function(query) {
+            window.handleGlobalSearch(query);
+        };
+        
+        // User menu handler
+        window.showUserMenu = function() {
+            showSection('profile');
+        };
+        
+        // Title bar search event
+        document.addEventListener('titlebar-search', function(e) {
+            const query = e.detail.query;
+            if (query.length > 0) {
+                filterProductsBySearch(query);
+            } else {
+                // Reset products display
+                renderAllProducts();
+            }
+        });
+        
+        // Sync search with title bar
+        const originalSearchInput = document.getElementById('searchInput');
+        if (originalSearchInput) {
+            originalSearchInput.addEventListener('input', function() {
+                const titleBarSearch = document.getElementById('titlebar-search-input');
+                if (titleBarSearch && titleBarSearch.value !== this.value) {
+                    titleBarSearch.value = this.value;
+                }
+            });
+        }
+        
+        // Theme integration
+        document.addEventListener('theme-changed', function(e) {
+            const theme = e.detail.theme;
+            if (theme === 'light') {
+                document.body.classList.add('light-theme');
+            } else {
+                document.body.classList.remove('light-theme');
+            }
+        });
+    }
+    
+    // Override original window controls
+    window.minimizeWindow = async function() {
+        if (window.titleBar) {
+            await window.titleBar.minimizeWindow();
+        }
+    };
+    
+    window.maximizeWindow = async function() {
+        if (window.titleBar) {
+            await window.titleBar.toggleMaximize();
+        }
+    };
+    
+    window.closeWindow = async function() {
+        if (window.titleBar) {
+            await window.titleBar.closeWindow();
+        }
+    };
+    
+    // Update user info when profile changes
+    function updateTitleBarUser(username) {
+        if (window.titleBar) {
+            window.titleBar.updateUser(username);
+        }
+    }
+    
+    // Update theme from settings
+    function updateTitleBarTheme(theme) {
+        if (window.titleBar) {
+            window.titleBar.setTheme(theme);
+        }
+    }
+    </script>
+</body>
+</html>

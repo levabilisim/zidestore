@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zide Store - Giriş</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles/titlebar.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #8a2be2;
+            --primary-dark: #6a1b9a;
+            --secondary: #00e5ff;
+            --bg-dark: #0a0b10;
+            --bg-card: #1a1a2e;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --border: #333;
+            --error: #ff6b6b;
+            --success: #51cf66;
+        }
+
+        body[data-page="login"] {
+            background: radial-gradient(1200px 600px at 20% 0%, rgba(138,43,226,0.15), transparent 60%),
+                        radial-gradient(900px 500px at 120% 100%, rgba(0,229,255,0.1), transparent 60%),
+                        linear-gradient(135deg, var(--bg-dark), #16213e);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        .login-wrapper {
+            width: 100%;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .login-card {
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 16px;
+            margin: 0 auto 20px;
+            box-shadow: 0 10px 20px rgba(138, 43, 226, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .app-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0 0 8px 0;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .app-subtitle {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-label {
+            display: block;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 0 40px 0 16px;
+            color: var(--text-primary);
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            line-height: 1.2;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.2);
+        }
+
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 16px;
+            top: 38px;
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
+            pointer-events: none;
+            z-index: 2;
+            font-size: 16px;
+        }
+
+        .form-input:focus ~ .input-icon {
+            color: var(--primary);
+        }
+
+        .password-toggle {
+            cursor: pointer;
+            user-select: none;
+            pointer-events: auto;
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .remember-checkbox {
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .remember-checkbox:checked {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .remember-checkbox:checked::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .forgot-password {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+        .forgot-password:hover {
+            color: var(--secondary);
+        }
+
+        .login-button {
+            width: 100%;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(138, 43, 226, 0.4);
+        }
+
+        .login-button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .login-button .loading-spinner {
+            display: none;
+            margin-right: 8px;
+        }
+
+        .login-button.loading .loading-spinner {
+            display: inline-block;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .divider {
+            text-align: center;
+            margin: 30px 0;
+            position: relative;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .divider span {
+            background: var(--bg-card);
+            padding: 0 20px;
+        }
+
+        .register-section {
+            text-align: center;
+        }
+
+        .register-button {
+            width: 100%;
+            height: 50px;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .register-button:hover {
+            border-color: var(--primary);
+            background: rgba(138, 43, 226, 0.1);
+        }
+
+        .error-message {
+            background: rgba(255, 107, 107, 0.1);
+            border: 1px solid var(--error);
+            color: var(--error);
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .success-message {
+            background: rgba(81, 207, 102, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .floating-shapes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .shape {
+            position: absolute;
+            background: rgba(138, 43, 226, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .shape:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            top: 60%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .shape:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 30px 20px;
+                margin: 0 10px;
+            }
+            
+            .app-title {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body data-page="login">
+    <!-- Title Bar will be injected here -->
+    
+    <!-- Floating Background Shapes -->
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+    
+    <div class="login-wrapper">
+        <div class="login-card" id="loginCard">
+            <!-- Logo Section -->
+            <div class="logo-section">
+                <img src="../assets/logo.png" alt="Zide Store" class="logo">
+                <h1 class="app-title">ZIDE STORE</h1>
+                <p class="app-subtitle">Geleceğin alışveriş deneyimi</p>
+            </div>
+            
+            <!-- Error/Success Messages -->
+            <div class="error-message" id="errorMessage">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span id="errorText"></span>
+            </div>
+            
+            <div class="success-message" id="successMessage">
+                <i class="fas fa-check-circle"></i>
+                <span id="successText"></span>
+            </div>
+            
+            <!-- Login Form -->
+            <form id="loginForm" onsubmit="return handleLogin(event)">
+                <div class="form-group">
+                    <label class="form-label" for="username">Kullanıcı Adı</label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        class="form-input" 
+                        placeholder="Kullanıcı adınızı girin"
+                        autocomplete="username"
+                        required
+                    >
+                    <i class="fas fa-user input-icon"></i>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="password">Şifre</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        class="form-input" 
+                        placeholder="Şifrenizi girin"
+                        autocomplete="current-password"
+                        required
+                    >
+                    <i class="fas fa-eye password-toggle input-icon" onclick="togglePassword()"></i>
+                </div>
+                
+                <div class="form-options">
+                    <label class="remember-me">
+                        <input type="checkbox" id="rememberMe" class="remember-checkbox">
+                        <span>Beni hatırla</span>
+                    </label>
+                    <a href="#" class="forgot-password" onclick="showForgotPassword()">Şifremi unuttum</a>
+                </div>
+                
+                <button type="submit" class="login-button" id="loginButton">
+                    <i class="fas fa-spinner loading-spinner"></i>
+                    <span id="loginButtonText">Giriş Yap</span>
+                </button>
+            </form>
+            
+            <div class="divider">
+                <span>veya</span>
+            </div>
+            
+            <div class="register-section">
+                <button type="button" class="register-button" onclick="goToRegister()">
+                    <i class="fas fa-user-plus"></i> Yeni Hesap Oluştur
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="js/titlebar.js"></script>
+    <script src="script.js"></script>
+    
+    <!-- Enhanced Login Functionality -->
+    <script>
+        // Title bar setup
+        document.addEventListener('DOMContentLoaded', function() {
+            const titleBarConfig = {
+                theme: localStorage.getItem('theme') || 'dark',
+                accentColor: localStorage.getItem('accentColor') || 'purple',
+                title: 'Zide Store - Giriş',
+                icon: '../assets/logo.png',
+                showSearch: false,
+                showUser: false
+            };
+            
+            window.titleBar = new TitleBarManager(titleBarConfig);
+            
+            // Check if user is already logged in
+            checkExistingLogin();
+            
+            // Auto-focus username field
+            document.getElementById('username').focus();
+        });
+
+        // Enhanced login handler
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const rememberMe = document.getElementById('rememberMe').checked;
+            
+            if (!validateLoginForm(username, password)) {
+                return false;
+            }
+            
+            performLogin(username, password, rememberMe);
+            return false;
+        }
+
+        function validateLoginForm(username, password) {
+            if (!username) {
+                showError('Kullanıcı adı gerekli!');
+                return false;
+            }
+            
+            if (username.length < 3) {
+                showError('Kullanıcı adı en az 3 karakter olmalı!');
+                return false;
+            }
+            
+            if (!password) {
+                showError('Şifre gerekli!');
+                return false;
+            }
+            
+            if (password.length < 6) {
+                showError('Şifre en az 6 karakter olmalı!');
+                return false;
+            }
+            
+            return true;
+        }
+
+        function performLogin(username, password, rememberMe) {
+            setLoading(true);
+            hideMessages();
+            
+            // Simulate API call
+            setTimeout(() => {
+                // Simple validation (in real app, this would be server-side)
+                if (username === 'admin' && password === '123456') {
+                    // Successful login
+                    const userData = {
+                        username: username,
+                        email: username + '@zidestore.com',
+                        fullName: username.charAt(0).toUpperCase() + username.slice(1),
+                        avatar: 'https://ui-avatars.com/api/?name=' + username + '&background=8a2be2&color=fff',
+                        loginTime: new Date().toISOString()
+                    };
+                    
+                    // Save user data
+                    localStorage.setItem('loggedInUser', JSON.stringify(userData));
+                    localStorage.setItem('userToken', 'mock-jwt-token-' + Date.now());
+                    
+                    if (rememberMe) {
+                        localStorage.setItem('rememberUser', 'true');
+                    }
+                    
+                    showSuccess('Giriş başarılı! Yönlendiriliyorsunuz...');
+                    
+                    setTimeout(() => {
+                        window.location.href = 'store.html';
+                    }, 1500);
+                } else {
+                    showError('Kullanıcı adı veya şifre hatalı!');
+                    setLoading(false);
+                }
+            }, 1500);
+        }
+
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.querySelector('.password-toggle');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        }
+
+        function setLoading(loading) {
+            const button = document.getElementById('loginButton');
+            const buttonText = document.getElementById('loginButtonText');
+            
+            if (loading) {
+                button.classList.add('loading');
+                button.disabled = true;
+                buttonText.textContent = 'Giriş yapılıyor...';
+            } else {
+                button.classList.remove('loading');
+                button.disabled = false;
+                buttonText.textContent = 'Giriş Yap';
+            }
+        }
+
+        function showError(message) {
+            const errorEl = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+            errorText.textContent = message;
+            errorEl.style.display = 'flex';
+            
+            setTimeout(() => {
+                errorEl.style.display = 'none';
+            }, 5000);
+        }
+
+        function showSuccess(message) {
+            const successEl = document.getElementById('successMessage');
+            const successText = document.getElementById('successText');
+            successText.textContent = message;
+            successEl.style.display = 'flex';
+        }
+
+        function hideMessages() {
+            document.getElementById('errorMessage').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'none';
+        }
+
+        function checkExistingLogin() {
+            const user = localStorage.getItem('loggedInUser');
+            const remember = localStorage.getItem('rememberUser');
+            
+            if (user && remember) {
+                showSuccess('Önceki oturum bulundu, yönlendiriliyorsunuz...');
+                setTimeout(() => {
+                    window.location.href = 'store.html';
+                }, 1500);
+            }
+        }
+
+        function goToRegister() {
+            window.location.href = 'register.html';
+        }
+
+        function showForgotPassword() {
+            showError('Şifre sıfırlama özelliği yakında eklenecek!');
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const form = document.getElementById('loginForm');
+                form.dispatchEvent(new Event('submit'));
+            }
+        });
+    </script>
+</body>
+</html>

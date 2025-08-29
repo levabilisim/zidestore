@@ -1,0 +1,260 @@
+<!-- 
+ZIDE STORE - TITLE BAR COMPONENT
+Modern Windows 11 Style Title Bar
+Usage: Include this file in your HTML pages
+-->
+
+<!-- Title Bar CSS -->
+<link rel="stylesheet" href="styles/titlebar.css">
+
+<!-- Title Bar Structure (Will be injected by JavaScript) -->
+<!-- Bu dosya template olarak kullanılacak, actual HTML JavaScript tarafından inject edilecek -->
+
+<!-- Title Bar JavaScript -->
+<script src="js/titlebar.js"></script>
+
+<script>
+// Title Bar Configuration ve Initialization
+document.addEventListener('DOMContentLoaded', function() {
+    // Sayfa tipine göre farklı konfigürasyonlar
+    const pageType = document.body.getAttribute('data-page') || 'default';
+    
+    let titleBarConfig = {
+        theme: localStorage.getItem('theme') || 'dark',
+        accentColor: localStorage.getItem('accentColor') || 'blue',
+        title: 'Zide Store',
+        icon: '../assets/logo.png',
+        showSearch: true,
+        showUser: true,
+        searchPlaceholder: 'Ürün ara...'
+    };
+    
+    // Sayfa tipine göre özel ayarlar
+    switch(pageType) {
+        case 'login':
+            titleBarConfig.showSearch = false;
+            titleBarConfig.showUser = false;
+            titleBarConfig.title = 'Zide Store - Giriş';
+            break;
+            
+        case 'loading':
+            titleBarConfig.showSearch = false;
+            titleBarConfig.showUser = false;
+            titleBarConfig.title = 'Zide Store - Yükleniyor';
+            break;
+            
+        case 'store':
+            titleBarConfig.title = 'Zide Store - Mağaza';
+            titleBarConfig.searchPlaceholder = 'Ürün, kategori ara...';
+            break;
+            
+        case 'cart':
+            titleBarConfig.title = 'Zide Store - Sepet';
+            titleBarConfig.showSearch = false;
+            break;
+            
+        case 'profile':
+            titleBarConfig.title = 'Zide Store - Profil';
+            titleBarConfig.showSearch = false;
+            break;
+    }
+    
+    // Title Bar'ı başlat
+    window.titleBar = new TitleBarManager(titleBarConfig);
+    
+    // Custom event listeners
+    setupTitleBarEvents();
+});
+
+function setupTitleBarEvents() {
+    // Arama eventi
+    document.addEventListener('titlebar-search', function(e) {
+        const query = e.detail.query;
+        console.log('Searching for:', query);
+        
+        // Ana sayfa arama fonksiyonunu çağır (eğer varsa)
+        if (typeof window.handleGlobalSearch === 'function') {
+            window.handleGlobalSearch(query);
+        }
+    });
+    
+    // Arama execute eventi
+    document.addEventListener('titlebar-search-execute', function(e) {
+        const query = e.detail.query;
+        console.log('Executing search:', query);
+        
+        // Ürünler sayfasına yönlendir (eğer farklı sayfadaysa)
+        if (window.location.pathname.includes('store.html')) {
+            if (typeof window.executeSearch === 'function') {
+                window.executeSearch(query);
+            }
+        } else {
+            // Store sayfasına yönlendir ve arama yap
+            window.location.href = `store.html?search=${encodeURIComponent(query)}`;
+        }
+    });
+    
+    // Kullanıcı profil eventi
+    document.addEventListener('titlebar-user-click', function(e) {
+        console.log('User clicked:', e.detail.user);
+        
+        // Profil sayfasına git veya dropdown aç
+        if (typeof window.showUserMenu === 'function') {
+            window.showUserMenu();
+        } else if (window.location.pathname.includes('store.html')) {
+            // Store sayfasında profil bölümünü aç
+            if (typeof window.showSection === 'function') {
+                window.showSection('profile');
+            }
+        }
+    });
+    
+    // Ana sayfa eventi
+    document.addEventListener('titlebar-home-click', function(e) {
+        console.log('Home icon clicked');
+        
+        if (window.location.pathname.includes('store.html')) {
+            // Store sayfasında ana sayfa bölümünü aç
+            if (typeof window.showSection === 'function') {
+                window.showSection('home');
+            }
+        } else {
+            // Store sayfasına yönlendir
+            window.location.href = 'store.html';
+        }
+    });
+    
+    // Tema değişim eventi
+    document.addEventListener('theme-changed', function(e) {
+        const theme = e.detail.theme;
+        if (window.titleBar) {
+            window.titleBar.setTheme(theme);
+        }
+    });
+    
+    // Accent color değişim eventi
+    document.addEventListener('accent-changed', function(e) {
+        const accent = e.detail.accent;
+        if (window.titleBar) {
+            window.titleBar.setAccentColor(accent);
+        }
+    });
+    
+    // Kullanıcı güncelleme eventi
+    document.addEventListener('user-updated', function(e) {
+        const username = e.detail.username;
+        if (window.titleBar) {
+            window.titleBar.updateUser(username);
+        }
+    });
+}
+
+// Global Title Bar Utilities
+window.titleBarUtils = {
+    setTheme: function(theme) {
+        localStorage.setItem('theme', theme);
+        if (window.titleBar) {
+            window.titleBar.setTheme(theme);
+        }
+        
+        // Custom event dispatch
+        document.dispatchEvent(new CustomEvent('theme-changed', {
+            detail: { theme: theme }
+        }));
+    },
+    
+    setAccentColor: function(color) {
+        localStorage.setItem('accentColor', color);
+        if (window.titleBar) {
+            window.titleBar.setAccentColor(color);
+        }
+        
+        // Custom event dispatch
+        document.dispatchEvent(new CustomEvent('accent-changed', {
+            detail: { accent: color }
+        }));
+    },
+    
+    updateUser: function(username) {
+        localStorage.setItem('currentUser', username);
+        if (window.titleBar) {
+            window.titleBar.updateUser(username);
+        }
+        
+        // Custom event dispatch
+        document.dispatchEvent(new CustomEvent('user-updated', {
+            detail: { username: username }
+        }));
+    },
+    
+    updateTitle: function(title) {
+        if (window.titleBar) {
+            window.titleBar.updateTitle(title);
+        }
+        document.title = title;
+    },
+    
+    hideSearch: function() {
+        if (window.titleBar) {
+            window.titleBar.hideSearch();
+        }
+    },
+    
+    showSearch: function() {
+        if (window.titleBar) {
+            window.titleBar.showSearch();
+        }
+    },
+    
+    focusSearch: function() {
+        if (window.titleBar) {
+            window.titleBar.focusSearch();
+        }
+    }
+};
+
+// Keyboard shortcuts global handler
+document.addEventListener('keydown', function(e) {
+    // Ctrl/Cmd + K for search focus
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        window.titleBarUtils.focusSearch();
+    }
+});
+</script>
+
+<!-- 
+USAGE EXAMPLES:
+
+1. Basic Setup (in your HTML head):
+<script>
+document.body.setAttribute('data-page', 'store'); // or 'login', 'loading', etc.
+</script>
+
+2. Custom Configuration:
+<script>
+window.titleBarCustomConfig = {
+    theme: 'light',
+    accentColor: 'purple',
+    title: 'Custom Title',
+    showSearch: false
+};
+</script>
+
+3. Custom Event Handlers:
+<script>
+window.handleGlobalSearch = function(query) {
+    // Your search logic
+};
+
+window.showUserMenu = function() {
+    // Your user menu logic
+};
+</script>
+
+4. Theme Control:
+<script>
+window.titleBarUtils.setTheme('light');
+window.titleBarUtils.setAccentColor('green');
+</script>
+-->

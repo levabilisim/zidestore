@@ -1,0 +1,506 @@
+/* ========================================
+   WINDOWS 11 STYLE TITLE BAR
+   Modern, Fluent Design inspired
+   ======================================== */
+
+.titlebar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 32px;
+    background: var(--titlebar-bg, #202020);
+    border-bottom: 1px solid var(--titlebar-border, #2d2d2d);
+    -webkit-app-region: drag; /* Title bar tamamı draggable */
+    user-select: none;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    font-size: 12px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 10000;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+    animation: titlebarSlideIn 0.3s ease-out;
+}
+
+@keyframes titlebarSlideIn {
+    from {
+        transform: translateY(-32px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Pencere aktif değilken */
+.titlebar.inactive {
+    background: var(--titlebar-bg-inactive, #1a1a1a);
+    border-bottom-color: var(--titlebar-border-inactive, #252525);
+}
+
+/* ========================================
+   SOL BÖLÜM - Logo ve Başlık
+   ======================================== */
+.titlebar-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-left: 16px;
+    -webkit-app-region: drag;
+    min-width: 0;
+    flex: 1;
+}
+
+.titlebar-icon {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+    border-radius: 2px;
+    opacity: 0.9;
+    transition: opacity 0.2s ease;
+    -webkit-app-region: no-drag;
+    cursor: pointer;
+}
+
+.titlebar-title {
+    color: var(--titlebar-text, #e1e1e1);
+    font-weight: 400;
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+    transition: color 0.2s ease;
+    -webkit-app-region: drag;
+    cursor: default;
+}
+
+.titlebar.inactive .titlebar-title {
+    color: var(--titlebar-text-inactive, #999);
+}
+
+.titlebar.inactive .titlebar-icon {
+    opacity: 0.7;
+}
+
+/* ========================================
+   ORTA BÖLÜM - Arama (Opsiyonel)
+   ======================================== */
+.titlebar-center {
+    flex: 2;
+    display: flex;
+    justify-content: center;
+    max-width: 480px;
+    margin: 0 16px;
+    -webkit-app-region: drag;
+}
+
+/* Arama olmadığında boş alan */
+.titlebar-center-spacer {
+    flex: 2;
+    height: 32px;
+    -webkit-app-region: drag; /* Bu alan tamamen draggable */
+    cursor: default;
+}
+
+.titlebar-search {
+    position: relative;
+    width: 100%;
+    max-width: 320px;
+    -webkit-app-region: no-drag; /* Search alanı draggable değil */
+}
+
+.titlebar-search-input {
+    width: 100%;
+    height: 24px;
+    padding: 0 32px 0 28px;
+    border: 1px solid var(--search-border, #3d3d3d);
+    border-radius: 4px;
+    background: var(--search-bg, #2d2d2d);
+    color: var(--search-text, #e1e1e1);
+    font-size: 11px;
+    outline: none;
+    transition: all 0.2s ease;
+    -webkit-app-region: no-drag; /* Input draggable değil */
+}
+
+.titlebar-search-input:focus {
+    border-color: var(--accent-color, #0078d4);
+    background: var(--search-bg-focus, #323232);
+    box-shadow: 0 0 0 1px var(--accent-color, #0078d4);
+}
+
+.titlebar-search-input::placeholder {
+    color: var(--search-placeholder, #888);
+}
+
+.titlebar-search-icon {
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--search-icon, #888);
+    font-size: 10px;
+    pointer-events: none;
+}
+
+.titlebar-search-clear {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--search-icon, #888);
+    font-size: 10px;
+    cursor: pointer;
+    padding: 2px;
+    border-radius: 2px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    -webkit-app-region: no-drag; /* Clear button draggable değil */
+}
+
+.titlebar-search-input:not(:placeholder-shown) + .titlebar-search-icon + .titlebar-search-clear {
+    opacity: 1;
+}
+
+.titlebar-search-clear:hover {
+    background: var(--button-hover, #404040);
+    color: var(--search-text, #e1e1e1);
+}
+
+/* ========================================
+   SAĞ BÖLÜM - Kullanıcı ve Kontroller
+   ======================================== */
+.titlebar-right {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex: 1;
+    justify-content: flex-end;
+    padding-right: 0;
+    /* titlebar-right'ı draggable yap, içindeki interactive elemanlar no-drag olacak */
+}
+
+.titlebar-user {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+    margin-right: 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    max-width: 120px;
+    -webkit-app-region: no-drag; /* User area draggable değil */
+}
+
+.titlebar-user:hover {
+    background: var(--button-hover, #404040);
+}
+
+.titlebar-user-avatar {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--accent-color, #0078d4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 8px;
+    font-weight: 600;
+}
+
+.titlebar-user-name {
+    color: var(--titlebar-text, #e1e1e1);
+    font-size: 11px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Kullanıcı dropdown menüsü */
+.titlebar-user-menu {
+    position: absolute;
+    right: 12px;
+    top: 36px;
+    background: var(--titlebar-bg, #202020);
+    border: 1px solid var(--titlebar-border, #2d2d2d);
+    border-radius: 8px;
+    min-width: 200px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+    padding: 8px 6px;
+    display: none;
+    z-index: 11000;
+}
+
+.titlebar-user-menu.open { display: block; }
+
+.titlebar-user-menu .menu-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    color: var(--titlebar-text, #e1e1e1);
+    cursor: pointer;
+    border-radius: 6px;
+}
+
+.titlebar-user-menu .menu-item:hover {
+    background: var(--button-hover, #404040);
+}
+
+.titlebar-user-menu .menu-separator { height:1px; background:var(--titlebar-border, #2d2d2d); margin:6px 0; }
+
+/* ========================================
+   PENCERE KONTROL BUTONLARI
+   ======================================== */
+.titlebar-controls {
+    display: flex;
+    height: 32px;
+    -webkit-app-region: no-drag; /* Window controls'ü draggable yapma */
+}
+
+.titlebar-control {
+    width: 46px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-app-region: no-drag; /* Butonları draggable yapma */
+    background: transparent;
+    border: none;
+    color: var(--control-color, #e1e1e1);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    outline: none;
+    position: relative;
+}
+
+.titlebar-control:hover {
+    background: var(--control-hover, #404040);
+}
+
+.titlebar-control:active {
+    background: var(--control-active, #505050);
+}
+
+/* Minimize Button */
+.titlebar-control.minimize:hover {
+    background: var(--control-hover, #404040);
+}
+
+/* Maximize/Restore Button */
+.titlebar-control.maximize:hover {
+    background: var(--control-hover, #404040);
+}
+
+/* Close Button */
+.titlebar-control.close:hover {
+    background: var(--close-hover, #e81123);
+    color: white;
+}
+
+.titlebar-control.close:active {
+    background: var(--close-active, #c50e1f);
+}
+
+/* Control Icons */
+.titlebar-control i {
+    font-size: 10px;
+    line-height: 1;
+}
+
+/* Windows 11 Özel İkonlar */
+.titlebar-control.minimize::before {
+    content: "";
+    width: 10px;
+    height: 1px;
+    background: currentColor;
+    position: absolute;
+}
+
+.titlebar-control.maximize::before {
+    content: "";
+    width: 9px;
+    height: 9px;
+    border: 1px solid currentColor;
+    position: absolute;
+    background: transparent;
+}
+
+.titlebar-control.restore::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border: 1px solid currentColor;
+    position: absolute;
+    background: transparent;
+}
+
+.titlebar-control.restore::after {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border: 1px solid currentColor;
+    position: absolute;
+    background: var(--titlebar-bg, #202020);
+    top: 10px;
+    left: 17px;
+}
+
+.titlebar-control.close::before {
+    content: "✕";
+    font-size: 10px;
+    font-weight: 400;
+}
+
+/* ========================================
+   TEMA VARYASYONLARI
+   ======================================== */
+
+/* Light Theme */
+.titlebar.light {
+    --titlebar-bg: #f3f3f3;
+    --titlebar-border: #e0e0e0;
+    --titlebar-text: #323130;
+    --titlebar-bg-inactive: #f9f9f9;
+    --titlebar-border-inactive: #e8e8e8;
+    --titlebar-text-inactive: #605e5c;
+    --search-bg: #ffffff;
+    --search-border: #d1d1d1;
+    --search-text: #323130;
+    --search-placeholder: #605e5c;
+    --search-bg-focus: #ffffff;
+    --button-hover: #e1dfdd;
+    --control-color: #323130;
+    --control-hover: #e1dfdd;
+    --control-active: #d2d0ce;
+    --close-hover: #e81123;
+    --close-active: #c50e1f;
+}
+
+/* Dark Theme (Default) */
+.titlebar.dark {
+    --titlebar-bg: #202020;
+    --titlebar-border: #2d2d2d;
+    --titlebar-text: #e1e1e1;
+    --titlebar-bg-inactive: #1a1a1a;
+    --titlebar-border-inactive: #252525;
+    --titlebar-text-inactive: #999999;
+    --search-bg: #2d2d2d;
+    --search-border: #3d3d3d;
+    --search-text: #e1e1e1;
+    --search-placeholder: #888888;
+    --search-bg-focus: #323232;
+    --button-hover: #404040;
+    --control-color: #e1e1e1;
+    --control-hover: #404040;
+    --control-active: #505050;
+    --close-hover: #e81123;
+    --close-active: #c50e1f;
+}
+
+/* Accent Color Variants */
+.titlebar.accent-blue {
+    --accent-color: #0078d4;
+}
+
+.titlebar.accent-purple {
+    --accent-color: #8b5cf6;
+}
+
+.titlebar.accent-green {
+    --accent-color: #10b981;
+}
+
+.titlebar.accent-orange {
+    --accent-color: #f59e0b;
+}
+
+/* ========================================
+   RESPONSIVE & UTILITY
+   ======================================== */
+
+/* Küçük ekranlar için */
+@media (max-width: 768px) {
+    .titlebar-center {
+        display: none;
+    }
+    
+    .titlebar-user-name {
+        display: none;
+    }
+    
+    .titlebar-left {
+        flex: 2;
+    }
+}
+
+/* Çok küçük ekranlar için */
+@media (max-width: 480px) {
+    .titlebar-title {
+        display: none;
+    }
+    
+    .titlebar-user {
+        display: none;
+    }
+}
+
+/* Custom Scrollbar für Search Dropdown (if needed) */
+.titlebar-search-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--search-bg, #2d2d2d);
+    border: 1px solid var(--search-border, #3d3d3d);
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1001;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Animation Classes */
+.titlebar-fade-in {
+    animation: titlebarFadeIn 0.3s ease;
+}
+
+@keyframes titlebarFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* High DPI Support */
+@media (-webkit-min-device-pixel-ratio: 2) {
+    .titlebar {
+        border-bottom-width: 0.5px;
+    }
+}
+
+/* Focus Visible Support */
+.titlebar-control:focus-visible {
+    outline: 2px solid var(--accent-color, #0078d4);
+    outline-offset: -2px;
+}
+
+/* Print Media */
+@media print {
+    .titlebar {
+        display: none !important;
+    }
+}
