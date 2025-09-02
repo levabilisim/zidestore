@@ -2,12 +2,12 @@
    Apply the class .custom-scroll to the body or containers you want to style.
    Uses WebKit + Firefox properties. */
 :root{
-  --scroll-bg: rgba(255,255,255,0.02);
-  --scroll-track: rgba(0,0,0,0);
-  --scroll-thumb: rgba(150,150,150,0.12);
-  --scroll-thumb-hover: rgba(150,150,150,0.22);
-  --scroll-thumb-active: rgba(150,150,150,0.32);
-  --scroll-thickness: 10px;
+  --scroll-bg: rgba(255,255,255,0.03);
+  --scroll-track: rgba(0,0,0,0.1);
+  --scroll-thumb: rgba(138,43,226,0.3);
+  --scroll-thumb-hover: rgba(138,43,226,0.5);
+  --scroll-thumb-active: rgba(138,43,226,0.7);
+  --scroll-thickness: 8px;
 }
 
 /* Apply to elements that have the .custom-scroll class or descendants */
@@ -23,25 +23,27 @@
 }
 .custom-scroll ::-webkit-scrollbar-track {
   background: var(--scroll-track);
-  border-radius: 999px;
+  border-radius: 10px;
 }
 .custom-scroll ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, var(--scroll-thumb), var(--scroll-thumb));
-  border-radius: 999px;
-  border: 2px solid transparent; /* spacing */
+  background: linear-gradient(180deg, var(--scroll-thumb), var(--scroll-thumb-hover));
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.1);
   background-clip: padding-box;
 }
 .custom-scroll ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, var(--scroll-thumb-hover), var(--scroll-thumb-hover));
+  background: linear-gradient(180deg, var(--scroll-thumb-hover), var(--scroll-thumb-active));
+  box-shadow: 0 0 8px rgba(138,43,226,0.3);
 }
 .custom-scroll ::-webkit-scrollbar-thumb:active {
   background: linear-gradient(180deg, var(--scroll-thumb-active), var(--scroll-thumb-active));
+  box-shadow: 0 0 12px rgba(138,43,226,0.5);
 }
 
 /* Slightly different look for the main content and panels */
 .main-content.custom-scroll, .library-main.custom-scroll {
-  --scroll-thumb: rgba(180,180,180,0.14);
-  --scroll-thumb-hover: rgba(180,180,180,0.26);
+  --scroll-thumb: rgba(138,43,226,0.25);
+  --scroll-thumb-hover: rgba(138,43,226,0.4);
 }
 
 /* Make the table horizontally responsive but keep vertical scroll tidy */

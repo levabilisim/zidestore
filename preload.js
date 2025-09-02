@@ -8,9 +8,27 @@ contextBridge.exposeInMainWorld('electronAPI', {
   close: () => ipcRenderer.invoke('window-close'),
   isMaximized: () => ipcRenderer.invoke('window-is-maximized'),
   
+  // Development mode
+  isDev: process.argv.includes('--dev') || process.argv.includes('--watch'),
+  
   // Loading progress
   onLoadingProgress: (callback) => {
     ipcRenderer.on('loading-progress', (event, progress) => callback(progress));
+  },
+  
+  // Auth API
+  auth: {
+    startRegistration: (userData) => ipcRenderer.invoke('auth-start-registration', userData),
+    completeRegistration: (email, code) => ipcRenderer.invoke('auth-complete-registration', email, code),
+    resendCode: (email) => ipcRenderer.invoke('auth-resend-code', email),
+    cancelRegistration: (email) => ipcRenderer.invoke('auth-cancel-registration', email),
+    login: (emailOrUsername, password) => ipcRenderer.invoke('auth-login', emailOrUsername, password),
+    getUserInfo: (userId) => ipcRenderer.invoke('auth-get-user-info', userId),
+    // Password reset API
+    sendResetCode: (email) => ipcRenderer.invoke('auth-send-reset-code', email),
+    verifyResetCode: (email, code) => ipcRenderer.invoke('auth-verify-reset-code', email, code),
+    resetPassword: (email, newPassword) => ipcRenderer.invoke('auth-reset-password', email, newPassword),
+    cancelPasswordReset: (email) => ipcRenderer.invoke('auth-cancel-password-reset', email)
   },
   
   // Sistem bilgileri

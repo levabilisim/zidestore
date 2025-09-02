@@ -10,11 +10,13 @@
   "scripts": {
     "start": "electron .",
     "dev": "electron . --dev",
+    "dev:watch": "electron . --dev --watch",
     "build": "electron-builder",
     "build-win": "electron-builder --win",
     "build-mac": "electron-builder --mac",
     "build-linux": "electron-builder --linux",
-    "zide:start": "npm run start"
+    "zide:start": "npm run start",
+    "zide:dev": "npm run dev:watch"
   },
   "bin": {
     "zide": "bin/zide.js"
@@ -25,8 +27,15 @@
   "author": "Zide Store Team",
   "license": "MIT",
   "devDependencies": {
+    "chokidar": "^3.6.0",
     "electron": "^26.0.0",
-    "electron-builder": "^24.6.4"
+    "electron-builder": "^24.6.4",
+    "electron-reload": "^2.0.0-alpha.1"
+  },
+  "dependencies": {
+    "nodemailer": "^6.9.4",
+    "crypto": "^1.0.1",
+    "fs-extra": "^11.1.1"
   },
   "build": {
     "appId": "com.zide.store",
